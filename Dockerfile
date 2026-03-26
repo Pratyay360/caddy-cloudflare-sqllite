@@ -1,7 +1,6 @@
 # Build stage
 ARG CADDY_VERSION
-FROM caddy:${CADDY_VERSION}-builder AS builder
-
+FROM dhi.io/caddy:2-debian13-dev as builder
 
 RUN apt-get install -y gcc
 
