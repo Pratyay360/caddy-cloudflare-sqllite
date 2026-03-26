@@ -2,13 +2,17 @@
 ARG CADDY_VERSION
 FROM caddy:${CADDY_VERSION}-builder AS builder
 
-# Build Caddy with the Cloudflare DNS module
+
+RUN apt-get install -y gcc
+
 RUN xcaddy build \
     --with github.com/caddy-dns/cloudflare \
     --with github.com/WeidiDeng/caddy-cloudflare-ip \
-    --with github.com/fvbommel/caddy-combine-ip-ranges \
-    --with github.com/AnswerDotAI/caddy-sqlite-router
-    
+    --with github.com/fvbommel/caddy-combine-ip-ranges 
+
+ENV CGO_ENABLED=1
+RUN xcaddy build --with github.com/AnswerDotAI/caddy-sqlite-router
+
 
 # Final stage
 FROM caddy:${CADDY_VERSION}
