@@ -3,10 +3,6 @@ name: Build and Push Docker Image (Reusable)
 on:
   workflow_call:
     inputs:
-      caddy_version:
-        description: 'Caddy version to build (without v prefix, e.g., 2.8.0)'
-        required: true
-        type: string
       dockerfile:
         description: 'Dockerfile to use'
         required: true
@@ -64,6 +60,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Fetch latest Caddy version
+        run: |
+          VERSION=$(curl -fsSL "https://api.github.com/repos/caddyserver/caddy/releases/latest" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            | grep '"tag_name"' | head -1 | sed 's/.*"v\([^"]*\)".*/\1/')
+          if [ -z "$VERSION" ]; then
+            echo "::error::Failed to fetch latest Caddy version."
+            exit 1
+          fi
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "Resolved latest Caddy version: ${VERSION}"
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -93,14 +101,6 @@ jobs:
           echo "REPO_OWNER=${REPO_OWNER}" >> $GITHUB_ENV
           REPO_NAME=$(echo "${GITHUB_REPOSITORY#*/}" | tr '[:upper:]' '[:lower:]')
           echo "REPO_NAME=${REPO_NAME}" >> $GITHUB_ENV
-          # Strip v prefix if present
-          VERSION="${{ inputs.caddy_version }}"
-          VERSION="${VERSION#v}"
-          if [ -z "$VERSION" ]; then
-            echo "::error::No version specified."
-            exit 1
-          fi
-          echo "VERSION=${VERSION}" >> $GITHUB_ENV
 
       - name: Set Docker Hub image (if credentials exist)
         run: |
