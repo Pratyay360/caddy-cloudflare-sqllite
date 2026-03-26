@@ -1,7 +1,6 @@
 # Build stage
 ARG CADDY_VERSION
-FROM caddy:${CADDY_VERSION}-builder-alpine AS builder
-
+FROM dhi.io/caddy:2-debian13-dev as builder
 
 RUN apt-get install -y gcc
 
@@ -13,8 +12,9 @@ RUN xcaddy build \
 ENV CGO_ENABLED=1
 RUN xcaddy build --with github.com/AnswerDotAI/caddy-sqlite-router
 
+
 # Final stage
-FROM caddy:${CADDY_VERSION}-alpine
+FROM caddy:${CADDY_VERSION}
 
 # Copy the custom-built Caddy binary
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
