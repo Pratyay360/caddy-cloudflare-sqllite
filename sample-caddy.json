@@ -5,14 +5,14 @@
         "srv0": {
           "listen": [":80", ":443"],
           "routes": [{
-            "match": [{ "host": ["*.test.pratyay.qzz.io"] }],
+            "match": [{ "host": ["*.test.example.com"] }],
             "handle": [{
               "handler": "subroute",
               "routes": [{
                 "handle": [
                   {
                     "handler": "sqlite_router",
-                    "db_path": "/data/routes.db",
+                    "db_path": "/etc/caddy/routes.db",
                     "query": "SELECT host, port FROM route WHERE domain = :domain"
                   },
                   {
@@ -30,7 +30,7 @@
     "tls": {
       "automation": {
         "policies": [{
-          "subjects": ["*.test.pratyay.qzz.io"],
+          "subjects": ["*.test.example.com"],
           "issuers": [{
             "module": "acme",
             "email": "${env.email}",
