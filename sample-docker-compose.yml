@@ -13,6 +13,7 @@ services:
       - ./caddy_data:/data:Z
       - ./caddy_config:/config:Z
       - ./routes.db:/etc/caddy/routes.db:Z
+    command: ["caddy", "run", "--config", "/etc/caddy/caddy.json"]
     networks:
       -  net
 
