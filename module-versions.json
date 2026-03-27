@@ -15,6 +15,9 @@
       "repo": "fvbommel/caddy-combine-ip-ranges",
       "last_commit_sha": "5624d08f5f9e788816bdd877b7c81280c69b434e",
       "last_checked": "2026-03-24T17:14:11.577115+00:00"
+    },
+    "github.com/AnswerDotAI/caddy-sqlite-router": {
+        "repo": "AnswerDotAI/caddy-sqlite-router"
+      }
     }
   }
-}

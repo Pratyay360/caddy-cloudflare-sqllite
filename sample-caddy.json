@@ -1,0 +1,50 @@
+{
+"apps": {
+    "http": {
+      "servers": {
+        "srv0": {
+          "listen": [":80", ":443"],
+          "routes": [{
+            "match": [{ "host": ["*.test.pratyay.qzz.io"] }],
+            "handle": [{
+              "handler": "subroute",
+              "routes": [{
+                "handle": [
+                  {
+                    "handler": "sqlite_router",
+                    "db_path": "/data/routes.db",
+                    "query": "SELECT host, port FROM route WHERE domain = :domain"
+                  },
+                  {
+                    "handler": "reverse_proxy",
+                    "upstreams": [{ "dial": "{http.vars.backend_upstream}" }]
+                  },
+                  { "handler": "encode", "encodings": { "gzip": {} } }
+                ]
+              }]
+            }]
+          }]
+        }
+      }
+    },
+    "tls": {
+      "automation": {
+        "policies": [{
+          "subjects": ["*.test.pratyay.qzz.io"],
+          "issuers": [{
+            "module": "acme",
+            "email": "${env.email}",
+            "challenges": {
+              "dns": {
+                "provider": {
+                  "name": "cloudflare",
+                  "api_token": "${env.CLOUDFLARE_API_TOKEN}"
+                }
+              }
+            }
+          }]
+        }]
+      }
+    }
+  }
+}
