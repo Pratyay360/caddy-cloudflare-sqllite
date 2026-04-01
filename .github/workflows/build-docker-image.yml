@@ -191,6 +191,16 @@ jobs:
         with:
           script: |
             const suffix = '${{ inputs.tag_suffix }}' || 'standard';
+            const repo = await github.rest.repos.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+
+            if (!repo.data.has_issues) {
+              core.notice('Repository issues are disabled; skipping failure issue creation.');
+              return;
+            }
+
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,

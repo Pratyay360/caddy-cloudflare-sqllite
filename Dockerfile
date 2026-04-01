@@ -1,12 +1,16 @@
 FROM docker.io/caddy:builder AS builder
 
+ARG CADDY_VERSION
+
 RUN apt-get update \
     && apt-get install -y --no-install-recommends gcc build-essential \
     && rm -rf /var/lib/apt/lists/*
 
 ENV CGO_ENABLED=1
 
-RUN xcaddy build \
+RUN if [ -n "$CADDY_VERSION" ]; then CADDY_REF="v${CADDY_VERSION}"; else CADDY_REF=""; fi; \
+    xcaddy build ${CADDY_REF} \
+    --output /usr/bin/caddy \
     --with github.com/caddy-dns/cloudflare \
     --with github.com/WeidiDeng/caddy-cloudflare-ip \
     --with github.com/fvbommel/caddy-combine-ip-ranges \
