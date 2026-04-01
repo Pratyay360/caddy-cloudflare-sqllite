@@ -43,12 +43,12 @@
             "issuers": [
               {
                 "module": "acme",
-                "email": "${{ secrets.ACME_EMAIL }}",
+                "email": "${{ env.ACME_EMAIL }}",
                 "challenges": {
                   "dns": {
                     "provider": {
                       "name": "cloudflare",
-                      "api_token": "${{ secrets.CLOUDFLARE_API_TOKEN }}"
+                      "api_token": "${{ env.CLOUDFLARE_API_TOKEN }}"
                     }
                   }
                 }
