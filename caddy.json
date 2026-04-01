@@ -15,7 +15,7 @@
                       "handle": [
                         {
                           "handler": "sqlite_router",
-                          "db_path": "/etc/caddy/db.db",
+                          "db_path": "/etc/caddy/routes.db",
                           "query": "SELECT host, port FROM route WHERE domain = :domain"
                         },
                         {
@@ -39,7 +39,7 @@
       "automation": {
         "policies": [
           {
-            "subjects": ["*.exa"],
+            "subjects": ["*.example.com"],
             "issuers": [
               {
                 "module": "acme",

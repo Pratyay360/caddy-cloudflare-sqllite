@@ -5,15 +5,12 @@ from pathlib import Path
 GITHUB_REPO = "caddyserver/caddy"
 GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN", "")
 
-# Derive image names from GITHUB_REPOSITORY (e.g. "CaddyBuilds/caddy-cloudflare")
-# This makes the script work for any fork without configuration.
 _github_repository = os.environ.get("GITHUB_REPOSITORY", "").lower()
 
-# Docker Hub — override with DOCKERHUB_REPOSITORY_NAME if set, else fall back to repo
+
 OFFICIAL_CADDY_IMAGE = "library/caddy"
 CUSTOM_IMAGE = os.environ.get("DOCKERHUB_REPOSITORY_NAME", "") or _github_repository
 
-# GHCR — always matches the GitHub repo
 GHCR_IMAGE = os.environ.get("GHCR_IMAGE", "") or _github_repository
 
 # Platforms required in both official and custom images
@@ -30,6 +27,7 @@ MODULES = [
     {"module": "github.com/caddy-dns/cloudflare", "repo": "caddy-dns/cloudflare"},
     {"module": "github.com/WeidiDeng/caddy-cloudflare-ip", "repo": "WeidiDeng/caddy-cloudflare-ip"},
     {"module": "github.com/fvbommel/caddy-combine-ip-ranges", "repo": "fvbommel/caddy-combine-ip-ranges"},
+    {"module": "github.com/AnswerDotAI/caddy-sqlite-router", "repo": "AnswerDotAI/caddy-sqlite-router" }
 ]
 
 # Path to module version tracking file (repo root)
