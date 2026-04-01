@@ -1,5 +1,5 @@
 # Build stage
-FROM docker.io/caddy:builder-alpine AS builder
+FROM docker.io/caddy:alpine AS builder
 
 RUN apk add --no-cache gcc musl-dev build-base
 
@@ -12,7 +12,7 @@ RUN xcaddy build \
     --with github.com/AnswerDotAI/caddy-sqlite-router
 
 # Final stage
-FROM docker.io/caddy:latest-alpine
+FROM docker.io/caddy:alpine
 
 # Copy the custom-built Caddy binary
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
