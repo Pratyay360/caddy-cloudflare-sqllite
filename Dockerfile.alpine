@@ -5,7 +5,6 @@ RUN apk add --no-cache gcc musl-dev build-base
 
 ENV CGO_ENABLED=1
 
-
 RUN xcaddy build \
     --with github.com/caddy-dns/cloudflare \
     --with github.com/WeidiDeng/caddy-cloudflare-ip \

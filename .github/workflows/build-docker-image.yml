@@ -5,8 +5,9 @@ on:
     inputs:
       caddy_version:
         description: 'Caddy version to build (without v prefix, e.g., 2.8.0)'
-        required: true
+        required: false
         type: string
+        default: ''
       dockerfile:
         description: 'Dockerfile to use'
         required: true
@@ -94,8 +95,17 @@ jobs:
           echo "REPO_OWNER=${REPO_OWNER}" >> $GITHUB_ENV
           REPO_NAME=$(echo "${GITHUB_REPOSITORY#*/}" | tr '[:upper:]' '[:lower:]')
           echo "REPO_NAME=${REPO_NAME}" >> $GITHUB_ENV
-          # Strip v prefix if present
           VERSION="${{ inputs.caddy_version }}"
+          if [ -z "$VERSION" ]; then
+            echo "No caddy_version provided. Fetching latest release from caddyserver/caddy..."
+            TAG=$(python3 -c "import json, urllib.request; print(json.load(urllib.request.urlopen('https://api.github.com/repos/caddyserver/caddy/releases/latest')).get('tag_name',''))")
+            if [ -z "$TAG" ]; then
+              echo "::error::Unable to fetch latest Caddy release tag."
+              exit 1
+            fi
+            VERSION="$TAG"
+          fi
+          # Strip v prefix if present
           VERSION="${VERSION#v}"
           if [ -z "$VERSION" ]; then
             echo "::error::No version specified."

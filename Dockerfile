@@ -2,6 +2,7 @@ FROM docker.io/caddy:builder AS builder
 RUN apt-get update \
     && apt-get install -y --no-install-recommends gcc build-essential \
     && rm -rf /var/lib/apt/lists/*
+
 ENV CGO_ENABLED=1
 
 RUN xcaddy build \
