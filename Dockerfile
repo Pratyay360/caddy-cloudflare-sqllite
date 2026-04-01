@@ -1,7 +1,5 @@
-# Build stage
-ARG CADDY_VERSION
-FROM caddy:${CADDY_VERSION}-builder AS builder
-
+FROM docker.io/caddy:builder AS builder
+RUN apt install gcc build-essential
 ENV CGO_ENABLED=1
 
 RUN xcaddy build \
@@ -12,7 +10,7 @@ RUN xcaddy build \
 
 
 # Final stage
-FROM caddy:${CADDY_VERSION}
+FROM docker.io/caddy:latest
 
 # Copy the custom-built Caddy binary
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
