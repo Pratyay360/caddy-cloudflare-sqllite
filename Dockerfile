@@ -2,9 +2,7 @@ FROM docker.io/caddy:builder AS builder
 
 ARG CADDY_VERSION
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends gcc build-essential \
-    && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache gcc musl-dev build-base
 
 ENV CGO_ENABLED=1
 
